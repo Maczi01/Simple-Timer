@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="theme-color" content="#000000">
+    <title>simple timer</title>
+    <script src="https://unpkg.com/react@16/umd/react.development.js" crossorigin></script>
+    <script src="https://unpkg.com/react-dom@16/umd/react-dom.development.js" crossorigin></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <link rel="stylesheet" href="index.css">
+</head>
+<body>
+<div id="root"></div>
+<script type="text/babel">
+
+
+    const Title = () => (
+        <div className="title__container">
+            <h1 className="title">simple timer</h1>
+        </div>
+    )
+
+
+    class Timer extends React.Component {
+        constructor(props) {
+            super(props);
+            this.state = {
+                isPaused: false,
+                isRunning: false,
+                elapsedTime: 0,
+            };
+            this.handleStart = this.handleStart.bind(this);
+            this.handlePause = this.handlePause.bind(this);
+            this.handleStop = this.handleStop.bind(this);
+            this.stopCounting = this.stopCounting.bind(this);
+            this.startCounting = this.startCounting.bind(this);
+        }
+
+
+        handleStart() {
+            this.setState({
+                isRunning: true
+            })
+            this.startCounting();
+        }
+
+        startCounting() {
+            this.interval = window.setInterval((() => {
+                this.setState(
+                    (prevState) =>
+                        ({elapsedTime: prevState.elapsedTime + 1}))
+            }), 1000)
+
+        }
+
+        stopCounting() {
+            window.clearInterval(this.interval)
+        }
+
+        handlePause() {
+            this.setState(
+                function (prevState) {
+                    const isPaused = !prevState.isPaused;
+                    isPaused ? this.stopCounting() : this.startCounting();
+                    return {
+                        isPaused,
+                    }
+                }
+            )
+        }
+
+        handleStop() {
+            this.setState({
+                    isRunning: false,
+                    isPaused: false,
+                    elapsedTime: 0
+                }
+            )
+            this.stopCounting()
+        }
+
+        render() {
+            const {isRunning, isPaused, elapsedTime} = this.state;
+            let playVisible = "button__play"
+            const totalTimeInSeconds = 3;
+            const timeToLeftInSeconds = totalTimeInSeconds - elapsedTime;
+            const minutesLeft = Math.floor(timeToLeftInSeconds / 60);
+            const secondsLeft = Math.floor(timeToLeftInSeconds % 60);
+            const progress = (timeToLeftInSeconds / totalTimeInSeconds) * 100;
+            if (timeToLeftInSeconds === 0) this.stopCounting();
+            return (
+                <>
+                    <div className="timer__wrapper">
+                        <Clock minute={minutesLeft} second={secondsLeft}/>
+                        <button onClick={this.handleStart} className="button__play"/>
+                        <button onClick={this.handlePause} className="button__pause"/>
+                        <button onClick={this.handleStop} className="button__stop"/>
+                    </div>
+                    <ProgressBar percent={progress}/>
+                </>
+            )
+        }
+    }
+
+    function ProgressBar({percent = 20}) {
+        return (
+            <div className="ProgressBar">
+                <div style={{width: `${percent}%`}}></div>
+            </div>
+        )
+    }
+
+    function Clock({minute = 0, second = 0, className = ""}) {
+        return <h2 className={"Clock " + className}> Pozostało {minute}:{second}</h2>
+    }
+
+    const App = () => (
+        <>
+            <Title/>
+            <Timer/>
+        </>
+    );
+
+    ReactDOM.render(<App/>, document.getElementById("root"));
+
+</script>
+</body>
+</html>
