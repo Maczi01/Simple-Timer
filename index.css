@@ -50,6 +50,16 @@ body {
     background-image: url("stop.png");
 }
 
+.edit__stop {
+    width: 100px;
+    height: 100px;
+    background-color: blue;
+
+    background-position: center center;
+    background-repeat: no-repeat;
+    background-image: url("edit.png");
+}
+
 .button__pause {
     width: 100px;
     height: 100px;
@@ -86,4 +96,21 @@ body {
     height: 100%;
     background-color: red;
     border-radius: 5px;
+}
+
+.TimeboxEditor, .TimeboxCreator {
+    margin: 0 auto;
+    width: 80vw;
+    text-align: center;
+    border: 1px solid gray;
+    border-radius: 5px;
+    padding: 20px;
+    margin-bottom: 20px;
+}
+.Timebox{
+    border: 1px solid black;
+    border-radius: 5px;
+    padding: 5px;
+    margin: 10px 80px 0 10vw;
+    width: 80vw;
 }
