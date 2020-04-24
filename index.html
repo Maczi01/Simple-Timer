@@ -258,13 +258,16 @@
             state = {
                 timeboxes: [
                     {
-                        title: "Gra na puzonie",
+                        id: "dxgcbhjk",
+                        title: "Gra na cssach",
                         totalTimeInMinutes: "10",
                     }, {
+                        id: "dxgcbhsadasdasjk",
                         title: "Nauka komponentów",
                         totalTimeInMinutes: "40",
                     }, {
-                        title: "Klarnet",
+                        id: "dxgffffffcbhjk",
+                        title: "Wstawianie średników na końcu",
                         totalTimeInMinutes: "20",
                     },
                 ]
@@ -309,7 +312,7 @@
                             toEdit={this.state.timeboxes.editItem}
                         />
                         {this.state.timeboxes.map((timebox, index) =>
-                            <Timebox key={timebox.title}
+                            <Timebox key={timebox.id}
                                      timebox={timebox}
                                      index={index}
                                      title={timebox.title}
@@ -347,10 +350,10 @@
                 this.changeEdit()
             }
             handleTitleChange = e => {
-                this.setState({ title: e.target.value });
+                this.setState({title: e.target.value});
             };
             handleTotalTimeInMinutesChange = e => {
-                this.setState({ totalTimeInMinutes: e.target.value });
+                this.setState({totalTimeInMinutes: e.target.value});
             };
 
             render() {
@@ -381,7 +384,9 @@
                             </div>
                         }
                         <button onClick={onDelete}>Usun</button>
-                        <button onClick={this.changeEdit}>Edytuj</button>
+                        {isEditing ? <button onClick={this.changeEdit}>Anuluj</button> :
+                            <button onClick={this.changeEdit}>Edytuj</button>
+                        }
                     </div>
                 )
             }
