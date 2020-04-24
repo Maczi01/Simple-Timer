@@ -293,8 +293,6 @@
             }
 
             updateTimebox = (indexToUpdate, updatedTimebox) => {
-
-                console.log(updatedTimebox)
                 this.setState(prevState => {
                     const timeboxes = prevState.timeboxes.map((timebox, index) =>
                         index === indexToUpdate ? updatedTimebox : timebox
@@ -303,13 +301,11 @@
                 })
             };
 
-
             render() {
                 return (
                     <>
                         <TimeBoxCreator
                             onCreate={this.handleCreate}
-                            toEdit={this.state.timeboxes.editItem}
                         />
                         {this.state.timeboxes.map((timebox, index) =>
                             <Timebox key={timebox.id}
@@ -340,7 +336,6 @@
 
             handleSubmit = (e) => {
                 e.preventDefault();
-                console.log("saa");
                 this.props.onEdit(this.props.index, {
                     ...this.props.timebox,
                     title: this.state.title,
@@ -362,35 +357,50 @@
                 return (
                     <div className="Timebox">
                         {isEditing ?
-                            <form onSubmit={this.handleSubmit}>
-                                <label>
-                                    <input
-                                        value={this.state.title}
-                                        onChange={this.handleTitleChange}
-                                        type="text"
-                                    />
-                                </label>
-                                <label>
-                                    <input
-                                        value={this.state.totalTimeInMinutes}
-                                        onChange={this.handleTotalTimeInMinutesChange}
-                                        type="number"/>
-                                </label>
-                                <button>Zapisz</button>
-                            </form>
+                            <RenderEditForm
+                                handleSubmit={this.handleSubmit}
+                                handleTitleChange={this.handleTitleChange}
+                                handleTotalTimeInMinutesChange={this.handleTotalTimeInMinutesChange}
+                                title={this.state.title}
+                                totalTimeInMinutes={this.state.totalTimeInMinutes}
+                            />
                             :
-                            <div>
-                                <h3>{title} - {totalTimeInMinutes} min</h3>
-                            </div>
+                            <RenderTitleAndTime title={title} totalTimeInMinutes={totalTimeInMinutes}/>
                         }
                         <button onClick={onDelete}>Usun</button>
-                        {isEditing ? <button onClick={this.changeEdit}>Anuluj</button> :
+                        {isEditing ?
+                            <button onClick={this.changeEdit}>Anuluj</button> :
                             <button onClick={this.changeEdit}>Edytuj</button>
                         }
                     </div>
                 )
             }
         }
+
+        const RenderTitleAndTime = ({title, totalTimeInMinutes}) => (
+            <div>
+                <h3>{title} - {totalTimeInMinutes} min</h3>
+            </div>
+        )
+
+        const RenderEditForm = ({handleSubmit, handleTitleChange, handleTotalTimeInMinutesChange, title, totalTimeInMinutes}) => (
+            <form onSubmit={handleSubmit}>
+                <label>
+                    <input
+                        value={title}
+                        onChange={handleTitleChange}
+                        type="text"
+                    />
+                </label>
+                <label>
+                    <input
+                        value={totalTimeInMinutes}
+                        onChange={handleTotalTimeInMinutesChange}
+                        type="number"/>
+                </label>
+                <button>Zapisz</button>
+            </form>
+        )
 
         const App = () => (
             <TimeboxList/>
